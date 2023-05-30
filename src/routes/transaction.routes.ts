@@ -9,8 +9,8 @@ const app = Router({
 });
 
 
-app.post("/", new UserController().create)
-app.get("/:id", new UserController().findTransactions)
+app.post("/", new UserController().createTransaction)
+app.get("/:id", new UserController().findTransaction)
 app.get("/", new UserController().listTransaction)
 app.delete("/:id", new UserController().deleteTransaction)
 app.put("/:id", new UserController().editTransaction)
