@@ -3,7 +3,7 @@ import { v4 as createUuid } from 'uuid';
 
 export class User {
     private _id:string
-    protected transactions:Transaction[]
+    private _transactions:Transaction[]
     constructor (
         public _name: string,
         public _cpf:string,
@@ -11,6 +11,7 @@ export class User {
         public _age:number,
     ){
         this._id = createUuid();
+        this._transactions = [];
     }
 
     public get id(){
@@ -34,7 +35,19 @@ export class User {
     }
 
     public get transaction(){
-        return this.transactions;
+        return this._transactions;
+    }
+
+    public set name(name: string){
+        this._name = name;
+    }
+
+    public set email(email: string){
+        this._email = email;
+    }
+
+    public set age(age: number){
+        this._age = age;
     }
 
     public toJson() {
@@ -43,7 +56,7 @@ export class User {
             cpf: this._cpf,
             email: this._email,
             age: this._age,
-            transaction: this.transactions
+            transaction: this._transactions
         }
     }
 }

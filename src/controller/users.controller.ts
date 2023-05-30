@@ -93,18 +93,17 @@ export class UserController {
 
       let allUsers = users;
 
-      if(typeof name === "string"){
-    allUsers = allUsers.filter((user) => user.name.includes(`${name}`))
+      if (typeof name === "string") {
+        allUsers = allUsers.filter((user) => user.name.includes(`${name}`));
       }
 
-      if(typeof email === "string"){
-        allUsers = allUsers.filter((user) => user.email.includes(`${email}`))
-      }
-      
-      if(typeof cpf === "string"){
-        allUsers = allUsers.filter((user) => user.cpf === cpf)
+      if (typeof email === "string") {
+        allUsers = allUsers.filter((user) => user.email.includes(`${email}`));
       }
 
+      if (typeof cpf === "string") {
+        allUsers = allUsers.filter((user) => user.cpf === cpf);
+      }
 
       const listUsers = allUsers.map((user) => user.toJson());
       if (listUsers.length === 0) {
@@ -118,6 +117,70 @@ export class UserController {
         ok: true,
         message: "Users successfully listed",
         data: allUsers,
+      });
+    } catch (error: any) {
+      return res.status(500).send({
+        ok: false,
+        message: error.toString(),
+      });
+    }
+  }
+
+  public delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const findUser = users.findIndex((user) => user.id === id);
+
+      if (findUser < 0) {
+        return res.status(404).send({
+          ok: false,
+          message: "Users was not found",
+        });
+      }
+      const deletedUser = users.splice(findUser, 1);
+
+      return res.status(200).send({
+        ok: true,
+        message: "User delete was success!",
+        data: deletedUser[0].toJson(),
+      });
+    } catch (error: any) {
+      return res.status(500).send({
+        ok: false,
+        message: error.toString(),
+      });
+    }
+  }
+
+  public edit(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { name, email, age } = req.body;
+
+      const findUser = users.find((user) => user.id === id);
+
+      if (!findUser) {
+        return res.status(404).send({
+          ok: false,
+          message: "Users was not found",
+        });
+      }
+
+      if (name) {
+        findUser.name = name;
+      }
+      if (age) {
+        findUser.age = age;
+      }
+      if (email) {
+        findUser.email = email;
+      }
+
+      return res.status(200).send({
+        ok: true,
+        message: "User edit was success!",
+        data: findUser.toJson(),
       });
     } catch (error: any) {
       return res.status(500).send({
